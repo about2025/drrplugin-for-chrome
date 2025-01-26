@@ -129,5 +129,6 @@ addIgnoredPattern("社会の現実"); // 部分一致「社会の現実」
 addIgnoredPattern("^ぷに$"); // 部分一致「社会の現実」
 addIgnoredPattern("^たき$"); // 部分一致「社会の現実」
 addIgnoredPattern("^猫魔符$"); // 部分一致「社会の現実」
-addIgnoredPattern("^野球くん$"); // 部分一致「社会の現実」
+addIgnoredPattern("野球くん"); // 部分一致「社会の現実」
 addIgnoredPattern("真アコ兄"); // 部分一致「社会の現実」
+addIgnoredPattern("ミチコ"); // 部分一致「社会の現実」
