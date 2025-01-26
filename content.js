@@ -4,27 +4,70 @@ const hiddenRooms = ["誰でも歓迎部屋", "雑談部屋(画像OFF)"];
 // 無視する名前のリスト（正規表現の配列）
 const ignoredPatterns = [];
 
-// 部屋を非表示にする関数
 function hideRooms() {
   const roomElements = document.querySelectorAll("#room_list ul.rooms li");
-  roomElements.forEach((room) => {
+  console.log(`[Debug] Found ${roomElements.length} rooms.`); // 部屋の数を出力
+
+  roomElements.forEach((room, index) => {
+    console.log(`[Debug] Processing room #${index + 1}: ${room.outerHTML}`); // 各部屋のHTMLを出力
     const roomNameElement = room.querySelector(".name");
     const roomLockIcon = room.querySelector(".fa.fa-lock"); // 鍵アイコンを判定
+    const userList = room.querySelector("ul"); // 部屋内の人物リスト
+
+    let shouldHideRoom = false;
+
+    // 部屋名が指定リストに含まれる場合や鍵付きの場合
     if (roomNameElement) {
       const roomName = roomNameElement.innerText.trim();
+      console.log(`[Debug] Room name: ${roomName}`);
       if (hiddenRooms.includes(roomName) || roomLockIcon) {
-        if (room.style.display !== "none") {
-          console.log(`Hiding room: ${roomName}`); // デバッグ用ログ
-          room.style.display = "none";
+        console.log(`[Debug] Hiding room due to name or lock: ${roomName}`);
+        shouldHideRoom = true;
+      }
+    } else {
+      console.log(`[Debug] No room name element found.`);
+    }
+
+    // ユーザーリストが存在しない場合
+    if (!userList) {
+      console.log(`[Debug] No user list found in room.`);
+    } else {
+      console.log(`[Debug] User list element found: ${userList.outerHTML}`);
+
+      // ユーザーリストが空の場合
+      if (userList.children.length === 0) {
+        console.log(`[Debug] User list found, but it is empty.`);
+        shouldHideRoom = true;
+      } else {
+        console.log(`[Debug] User list has ${userList.children.length} items.`);
+      }
+
+      // 部屋内の最初の人物が指定リストに含まれる場合
+      if (userList.children.length > 0) {
+        const firstUser = userList.children[0].innerText.trim(); // 最初の人物
+        console.log(`[Debug] First user in the room: ${firstUser}`);
+        if (ignoredPatterns.some((regex) => regex.test(firstUser))) {
+          console.log(`[Debug] Hiding room due to first user: ${firstUser}`);
+          shouldHideRoom = true;
         }
       }
+    }
+
+    // 部屋を非表示
+    if (shouldHideRoom) {
+      console.log(`[Debug] Hiding room: ${roomNameElement ? roomNameElement.innerText.trim() : "Unnamed Room"}`);
+      room.style.display = "none";
+    } else {
+      console.log(`[Debug] Showing room: ${roomNameElement ? roomNameElement.innerText.trim() : "Unnamed Room"}`);
+      room.style.display = ""; // 表示する部屋はリセット
     }
   });
 }
 
+
 // 無視する名前やシステムメッセージを非表示にする関数
 function hideIgnoredContent() {
-  // チャットの発言の非表示
+  // チャットの発言を非表示
   document.querySelectorAll("#talks dl.talk").forEach((talk) => {
     const talkerNameElement = talk.querySelector("dt");
     if (talkerNameElement) {
@@ -134,3 +177,6 @@ addIgnoredPattern("真アコ兄"); // 部分一致「社会の現実」
 addIgnoredPattern("ミチコ"); // 部分一致「社会の現実」
 addIgnoredPattern("アサイー"); // 部分一致「社会の現実」
 addIgnoredPattern("@◇@"); // 部分一致「社会の現実」
+addIgnoredPattern("屁"); // 部分一致「社会の現実」
+addIgnoredPattern("みみみ"); // 部分一致「社会の現実」
+addIgnoredPattern("観念"); // 部分一致「社会の現実」
