@@ -1,8 +1,8 @@
 // 対象となる部屋の名前
 const hiddenRooms = ["誰でも歓迎部屋", "雑談部屋(画像OFF)"];
 
-// 無視する名前のリスト（動的に登録可能）
-const ignoredNames = new Set();
+// 無視する名前のリスト（正規表現の配列）
+const ignoredPatterns = [];
 
 // 部屋を非表示にする関数
 function hideRooms() {
@@ -26,7 +26,7 @@ function hideIgnoredContent() {
   // チャットの発言の非表示
   document.querySelectorAll("#talks dl.talk").forEach((talk) => {
     const talkerName = talk.querySelector("dt")?.innerText.trim();
-    if (talkerName && ignoredNames.has(talkerName)) {
+    if (talkerName && ignoredPatterns.some((regex) => regex.test(talkerName))) {
       console.log(`Hiding talk from: ${talkerName}`);
       talk.style.display = "none";
     }
@@ -35,26 +35,25 @@ function hideIgnoredContent() {
   // `talk system` のフレーズを動的にチェックして非表示
   document.querySelectorAll("#talks .talk.system").forEach((systemMessage) => {
     const messageText = systemMessage.innerText.trim();
-    // 無視対象の名前がシステムメッセージに含まれるか確認
-    for (const ignoredName of ignoredNames) {
-      if (
-        messageText.includes(`${ignoredName}さんが入室しました`) ||
-        messageText.includes(`${ignoredName}さんが退室しました`)
-      ) {
-        console.log(`Hiding system message: ${messageText}`);
-        systemMessage.style.display = "none";
-        break; // 一致したらそれ以上確認しない
-      }
+    if (
+      ignoredPatterns.some((regex) => regex.test(messageText)) &&
+      (messageText.includes("入室しました") || messageText.includes("退室しました"))
+    ) {
+      console.log(`Hiding system message: ${messageText}`);
+      systemMessage.style.display = "none";
     }
   });
 }
 
-// 動的に無視する名前を登録する関数
-function addIgnoredName(name) {
-  if (name) {
-    ignoredNames.add(name.trim());
-    console.log(`Added to ignored names: ${name}`);
+// 動的に無視する名前パターンを登録する関数
+function addIgnoredPattern(pattern) {
+  try {
+    const regex = new RegExp(pattern);
+    ignoredPatterns.push(regex);
+    console.log(`Added regex to ignored patterns: ${pattern}`);
     hideIgnoredContent(); // 登録後に即時非表示
+  } catch (e) {
+    console.error(`Invalid regular expression: ${pattern}`);
   }
 }
 
@@ -82,6 +81,7 @@ if (chatNode) {
   console.error("Target node #body not found!");
 }
 
-// 動的に名前を登録して無視するテスト（任意で削除可能）
-addIgnoredName("名無し");
-addIgnoredName("新田隼人");
+// 動的に正規表現を登録して無視するテスト（任意で削除可能）
+addIgnoredPattern("^名無し$");       // 完全一致「名無し」
+addIgnoredPattern("^新田隼人$");         // 「新田」で始まる名前全て
+addIgnoredPattern("ﾄﾞｼﾀ");         // 
