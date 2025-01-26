@@ -126,3 +126,8 @@ addIgnoredPattern("^名無し$"); // 完全一致「名無し」
 addIgnoredPattern("^新田隼人$"); // 完全一致「新田隼人」
 addIgnoredPattern("ﾄﾞｼﾀ"); // 部分一致「ﾄﾞｼﾀ」
 addIgnoredPattern("社会の現実"); // 部分一致「社会の現実」
+addIgnoredPattern("^ぷに$"); // 部分一致「社会の現実」
+addIgnoredPattern("^たき$"); // 部分一致「社会の現実」
+addIgnoredPattern("^猫魔符$"); // 部分一致「社会の現実」
+addIgnoredPattern("^野球くん$"); // 部分一致「社会の現実」
+addIgnoredPattern("真アコ兄"); // 部分一致「社会の現実」
