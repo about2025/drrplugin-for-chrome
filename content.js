@@ -214,3 +214,4 @@ addIgnoredPattern("赤羽");
 addIgnoredPattern("おそ松");
 addIgnoredPattern("ネカマ侍");
 addIgnoredPattern("タケミカヅチ");
+addIgnoredPattern("猫ぷは");
