@@ -168,27 +168,41 @@ observeChanges();
 addIgnoredPattern("^名無し$"); // 完全一致「名無し」
 addIgnoredPattern("^新田隼人$"); // 完全一致「新田隼人」
 addIgnoredPattern("ﾄﾞｼﾀ"); // 部分一致「ﾄﾞｼﾀ」
-addIgnoredPattern("社会の現実"); // 部分一致「社会の現実」
-addIgnoredPattern("^ぷに$"); // 部分一致「社会の現実」
-addIgnoredPattern("^たき$"); // 部分一致「社会の現実」
-addIgnoredPattern("^猫魔符$"); // 部分一致「社会の現実」
-addIgnoredPattern("野球くん"); // 部分一致「社会の現実」
-addIgnoredPattern("真アコ兄"); // 部分一致「社会の現実」
-addIgnoredPattern("ミチコ"); // 部分一致「社会の現実」
-addIgnoredPattern("アサイー"); // 部分一致「社会の現実」
-addIgnoredPattern("@◇@"); // 部分一致「社会の現実」
-addIgnoredPattern("屁"); // 部分一致「社会の現実」
-addIgnoredPattern("みみみ"); // 部分一致「社会の現実」
-addIgnoredPattern("隼人"); // 部分一致「社会の現実」
-addIgnoredPattern("苦夫"); // 部分一致「社会の現実」
-addIgnoredPattern("ぷにゃぷにゃ"); // 部分一致「社会の現実」
-addIgnoredPattern("レレレ"); // 部分一致「社会の現実」
-addIgnoredPattern("深淵"); // 部分一致「社会の現実」
-addIgnoredPattern("rakan"); // 部分一致「社会の現実」
-addIgnoredPattern("ちひろ"); // 部分一致「社会の現実」
-addIgnoredPattern("さそり"); // 部分一致「社会の現実」
-addIgnoredPattern("ニンニクましまし"); // 部分一致「社会の現実」
-addIgnoredPattern("熊"); // 部分一致「社会の現実」
-
-
-
+addIgnoredPattern("しんしん");
+addIgnoredPattern("社会の現実");
+addIgnoredPattern("^ぷに$");
+addIgnoredPattern("^たき$"); 
+addIgnoredPattern("^猫魔符$");
+addIgnoredPattern("野球くん");
+addIgnoredPattern("真アコ兄");
+addIgnoredPattern("ミチコ"); 
+addIgnoredPattern("アサイー");
+addIgnoredPattern("@◇@"); 
+addIgnoredPattern("屁"); 
+addIgnoredPattern("みみみ"); 
+addIgnoredPattern("隼人"); 
+addIgnoredPattern("苦夫"); 
+addIgnoredPattern("ぷにゃぷにゃ"); 
+addIgnoredPattern("レレレ"); 
+addIgnoredPattern("深淵"); 
+addIgnoredPattern("rakan"); 
+addIgnoredPattern("ちひろ"); 
+addIgnoredPattern("さそり"); 
+addIgnoredPattern("ニンニクましまし"); 
+addIgnoredPattern("熊"); 
+addIgnoredPattern("山の幸"); 
+addIgnoredPattern("ここなつ"); 
+addIgnoredPattern("丘介"); 
+addIgnoredPattern("はまいち");
+addIgnoredPattern("失敗作少女");
+addIgnoredPattern("♪");
+addIgnoredPattern("のび");
+addIgnoredPattern("さかな");
+addIgnoredPattern("オフショア");
+addIgnoredPattern("民");
+addIgnoredPattern("顎");
+addIgnoredPattern("あすか");
+addIgnoredPattern("ぶぶ");
+addIgnoredPattern("カイジ");
+addIgnoredPattern("たろ");
+addIgnoredPattern("あいすん");
