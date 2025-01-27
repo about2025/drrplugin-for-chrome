@@ -1,6 +1,9 @@
 // 対象となる部屋の名前
 const hiddenRooms = ["誰でも歓迎部屋", "雑談部屋(画像OFF)"];
 
+// 正規表現で指定する部屋名
+const regHiddenRooms = [/./];
+
 // 無視する名前のリスト（正規表現の配列）
 const ignoredPatterns = [];
 
@@ -11,16 +14,20 @@ function hideRooms() {
 
   roomElements.forEach((room, index) => {
     console.log(`[Debug] Processing room #${index + 1}: ${room.outerHTML}`); // 各部屋のHTMLを出力
-    const roomNameElement = room.querySelector(".name");
+    const roomNameElement = room.querySelector("li.name"); // 部屋名の取得
     const roomLockIcon = room.querySelector(".fa.fa-lock"); // 鍵アイコンを判定
     const userList = room.querySelector("ul"); // 部屋内の人物リスト
 
     let shouldHideRoom = false;
 
-    // 部屋名が指定リストに含まれる場合や鍵付きの場合
+    // 部屋名が指定リストまたは正規表現に一致する場合、または鍵付きの場合
     if (roomNameElement) {
       const roomName = roomNameElement.innerText.trim();
-      if (hiddenRooms.includes(roomName) || roomLockIcon) {
+      if (
+        hiddenRooms.includes(roomName) ||
+        regHiddenRooms.some((regex) => regex.test(roomName)) ||
+        roomLockIcon
+      ) {
         shouldHideRoom = true;
       }
     }
@@ -41,20 +48,20 @@ function hideRooms() {
       shouldHideRoom = true;
     }
 
-// 部屋を非表示
-if (shouldHideRoom) {
-  const parentUl = room.closest("ul.rooms");
-  if (parentUl) {
-    console.log(`[Debug] Hiding the entire room (ul.rooms).`);
-    parentUl.style.display = "none";
-  } else {
-    console.log(`[Debug] Hiding only the <li> element.`);
-    room.style.display = "none";
-  }
-} else {
-  console.log(`[Debug] Showing room.`);
-  room.style.display = ""; // 表示する部屋はリセット
-}
+    // 部屋を非表示
+    if (shouldHideRoom) {
+      const parentUl = room.closest("ul.rooms");
+      if (parentUl) {
+        console.log(`[Debug] Hiding the entire room (ul.rooms).`);
+        parentUl.style.display = "none";
+      } else {
+        console.log(`[Debug] Hiding only the <li> element.`);
+        room.style.display = "none";
+      }
+    } else {
+      console.log(`[Debug] Showing room.`);
+      room.style.display = ""; // 表示する部屋はリセット
+    }
   });
 }
 
@@ -193,4 +200,3 @@ addIgnoredPattern("kranky");
 
 // 初期化処理
 observeChanges();
-
