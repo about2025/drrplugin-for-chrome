@@ -206,3 +206,4 @@ addIgnoredPattern("ぶぶ");
 addIgnoredPattern("カイジ");
 addIgnoredPattern("たろ");
 addIgnoredPattern("あいすん");
+addIgnoredPattern("納豆");
