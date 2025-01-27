@@ -19,27 +19,29 @@ function hideRooms() {
     // 部屋名が指定リストに含まれる場合や鍵付きの場合
     if (roomNameElement) {
       const roomName = roomNameElement.innerText.trim();
-      console.log(`[Debug] Room name: ${roomName}`);
+      // console.log(`[Debug] Room name: ${roomName}`);
       if (hiddenRooms.includes(roomName) || roomLockIcon) {
-        console.log(`[Debug] Hiding room due to name or lock: ${roomName}`);
+        // console.log(`[Debug] Hiding room due to name or lock: ${roomName}`);
         shouldHideRoom = true;
       }
     } else {
-      console.log(`[Debug] No room name element found.`);
+      // console.log(`[Debug] No room name element found.`);
     }
 
     // ユーザーリストが存在しない場合
     if (!userList) {
-      console.log(`[Debug] No user list found in room.`);
+      // console.log(`[Debug] No user list found in room.`);
     } else {
-      console.log(`[Debug] User list element found: ${userList.outerHTML}`);
+      // console.log(`[Debug] User list element found: ${userList.outerHTML}`);
+
+     console.log(userList.children.length);
 
       // ユーザーリストが空の場合
       if (userList.children.length === 0) {
-        console.log(`[Debug] User list found, but it is empty.`);
+        console.log(`[?????Debug] User list found, but it is empty.`);
         shouldHideRoom = true;
       } else {
-        console.log(`[Debug] User list has ${userList.children.length} items.`);
+        console.log(`[!!!! Debug] User list has ${userList.children.length} items.`);
       }
 
       // 部屋内の最初の人物が指定リストに含まれる場合
@@ -55,10 +57,10 @@ function hideRooms() {
 
     // 部屋を非表示
     if (shouldHideRoom) {
-      console.log(`[Debug] Hiding room: ${roomNameElement ? roomNameElement.innerText.trim() : "Unnamed Room"}`);
+      //console.log(`[Debug] Hiding room: ${roomNameElement ? roomNameElement.innerText.trim() : "Unnamed Room"}`);
       room.style.display = "none";
     } else {
-      console.log(`[Debug] Showing room: ${roomNameElement ? roomNameElement.innerText.trim() : "Unnamed Room"}`);
+      //console.log(`[Debug] Showing room: ${roomNameElement ? roomNameElement.innerText.trim() : "Unnamed Room"}`);
       room.style.display = ""; // 表示する部屋はリセット
     }
   });
@@ -74,7 +76,7 @@ function hideIgnoredContent() {
       const talkerName = talkerNameElement.innerText.trim();
       if (ignoredPatterns.some((regex) => regex.test(talkerName))) {
         if (talk.style.display !== "none") {
-          console.log(`Hiding talk from: ${talkerName}`);
+        //  console.log(`Hiding talk from: ${talkerName}`);
           talk.style.display = "none";
         }
       }
@@ -161,57 +163,14 @@ function observeChanges() {
   }
 }
 
-// 初期化処理
-observeChanges();
 
 // 動的に正規表現を登録して無視するテスト（任意で削除可能）
 addIgnoredPattern("^名無し$"); // 完全一致「名無し」
 addIgnoredPattern("^新田隼人$"); // 完全一致「新田隼人」
 addIgnoredPattern("ﾄﾞｼﾀ"); // 部分一致「ﾄﾞｼﾀ」
-addIgnoredPattern("しんしん");
-addIgnoredPattern("社会の現実");
-addIgnoredPattern("^ぷに$");
-addIgnoredPattern("^たき$"); 
-addIgnoredPattern("^猫魔符$");
-addIgnoredPattern("野球くん");
-addIgnoredPattern("真アコ兄");
-addIgnoredPattern("ミチコ"); 
-addIgnoredPattern("アサイー");
-addIgnoredPattern("@◇@"); 
-addIgnoredPattern("屁"); 
-addIgnoredPattern("みみみ"); 
-addIgnoredPattern("隼人"); 
-addIgnoredPattern("苦夫"); 
-addIgnoredPattern("ぷにゃぷにゃ"); 
-addIgnoredPattern("レレレ"); 
-addIgnoredPattern("深淵"); 
-addIgnoredPattern("rakan"); 
-addIgnoredPattern("ちひろ"); 
-addIgnoredPattern("さそり"); 
-addIgnoredPattern("ニンニクましまし"); 
-addIgnoredPattern("熊"); 
-addIgnoredPattern("山の幸"); 
-addIgnoredPattern("ここなつ"); 
-addIgnoredPattern("丘介"); 
-addIgnoredPattern("はまいち");
-addIgnoredPattern("失敗作少女");
-addIgnoredPattern("♪");
-addIgnoredPattern("のび");
-addIgnoredPattern("さかな");
-addIgnoredPattern("オフショア");
-addIgnoredPattern("民");
-addIgnoredPattern("顎");
-addIgnoredPattern("あすか");
-addIgnoredPattern("ぶぶ");
-addIgnoredPattern("カイジ");
-addIgnoredPattern("たろ");
-addIgnoredPattern("あいすん");
-addIgnoredPattern("納豆");
-addIgnoredPattern("おじゆき");
-addIgnoredPattern("きたがわ");
-addIgnoredPattern("なめくじ");
-addIgnoredPattern("赤羽");
-addIgnoredPattern("おそ松");
-addIgnoredPattern("ネカマ侍");
-addIgnoredPattern("タケミカヅチ");
-addIgnoredPattern("猫ぷは");
+addIgnoredPattern(".");
+
+
+
+// 初期化処理
+observeChanges();
