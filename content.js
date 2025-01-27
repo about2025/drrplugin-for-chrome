@@ -185,6 +185,7 @@ addIgnoredPattern("タケミカヅチ");
 addIgnoredPattern("猫ぷは");
 addIgnoredPattern("正明");
 addIgnoredPattern("カナ");
+addIgnoredPattern("せこ");
 
 // 初期化処理
 observeChanges();
