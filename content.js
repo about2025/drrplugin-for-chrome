@@ -187,6 +187,7 @@ addIgnoredPattern("正明");
 addIgnoredPattern("カナ");
 addIgnoredPattern("せこ");
 addIgnoredPattern("なめし");
+addIgnoredPattern("のろ");
 
 // 初期化処理
 observeChanges();
