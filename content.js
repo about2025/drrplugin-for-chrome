@@ -209,3 +209,8 @@ addIgnoredPattern("あいすん");
 addIgnoredPattern("納豆");
 addIgnoredPattern("おじゆき");
 addIgnoredPattern("きたがわ");
+addIgnoredPattern("なめくじ");
+addIgnoredPattern("赤羽");
+addIgnoredPattern("おそ松");
+addIgnoredPattern("ネカマ侍");
+addIgnoredPattern("タケミカヅチ");
