@@ -2,9 +2,18 @@
   "manifest_version": 3,
   "name": "Drrrkari Lounge Filter",
   "version": "1.0",
-  "description": "特定の部屋を非表示にするChrome拡張",
-  "permissions": ["scripting"],
+  "description": "特定の部屋や人物名をフィルタリングするChrome拡張",
+  "permissions": ["storage"],
   "host_permissions": ["https://drrrkari.com/*"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": ["https://drrrkari.com/lounge/", "https://drrrkari.com/room/"],

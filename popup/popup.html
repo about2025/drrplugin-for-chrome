@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>設定</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <h1>フィルター設定</h1>
+  <form id="settings-form">
+    <label for="hidden-rooms">非表示にする部屋名 (カンマ区切り):</label>
+    <textarea id="hidden-rooms"></textarea>
+
+    <label for="regex-rooms">正規表現で指定する部屋名:</label>
+    <textarea id="regex-rooms"></textarea>
+
+    <label for="ignored-names">無視する人物名 (正規表現, 改行区切り):</label>
+    <textarea id="ignored-names"></textarea>
+
+    <button type="submit">保存</button>
+  </form>
+  <script src="popup.js"></script>
+</body>
+</html>

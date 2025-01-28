@@ -2,7 +2,7 @@
 const hiddenRooms = ["誰でも歓迎部屋", "雑談部屋(画像OFF)"];
 
 // 正規表現で指定する部屋名
-const regHiddenRooms = [/./];
+const regHiddenRooms = [/相談/,/😭/,/みみみ/];
 
 // 無視する名前のリスト（正規表現の配列）
 const ignoredPatterns = [];
@@ -143,8 +143,88 @@ function observeChanges() {
 addIgnoredPattern("^名無し$"); // 完全一致「名無し」
 addIgnoredPattern("^新田隼人$"); // 完全一致「新田隼人」
 addIgnoredPattern("ﾄﾞｼﾀ"); // 部分一致「ﾄﾞｼﾀ」
-addIgnoredPattern("しんしん");
+addIgnoredPattern("社会の現実");
+addIgnoredPattern("^ぷに$");
+addIgnoredPattern("^たき$"); 
+addIgnoredPattern("^猫魔符$");
+addIgnoredPattern("野球くん");
+addIgnoredPattern("真アコ兄");
+addIgnoredPattern("ミチコ"); 
+addIgnoredPattern("アサイー");
+addIgnoredPattern("@◇@"); 
+addIgnoredPattern("屁"); 
+addIgnoredPattern("みみみ"); 
+addIgnoredPattern("隼人"); 
+addIgnoredPattern("苦夫"); 
+addIgnoredPattern("ぷにゃぷにゃ"); 
+addIgnoredPattern("レレレ"); 
+addIgnoredPattern("深淵"); 
+addIgnoredPattern("rakan"); 
+addIgnoredPattern("ちひろ"); 
+addIgnoredPattern("さそり"); 
+addIgnoredPattern("ニンニクましまし"); 
+addIgnoredPattern("(?<!駆け抜ける)熊"); 
+addIgnoredPattern("山の幸"); 
+addIgnoredPattern("ここなつ"); 
+addIgnoredPattern("丘介"); 
+addIgnoredPattern("はまいち");
+addIgnoredPattern("失敗作少女");
+addIgnoredPattern("♪");
+addIgnoredPattern("のび");
+addIgnoredPattern("さかな");
+addIgnoredPattern("オフショア");
+addIgnoredPattern("民");
+addIgnoredPattern("顎");
+addIgnoredPattern("あすか");
+addIgnoredPattern("ぶぶ");
+addIgnoredPattern("カイジ");
+addIgnoredPattern("たろ");
+addIgnoredPattern("あいすん");
+addIgnoredPattern("納豆");
+addIgnoredPattern("おじゆき");
+addIgnoredPattern("きたがわ");
+addIgnoredPattern("なめくじ");
+addIgnoredPattern("赤羽");
+addIgnoredPattern("おそ松");
+addIgnoredPattern("ネカマ侍");
+addIgnoredPattern("タケミカヅチ");
+addIgnoredPattern("猫ぷは");
+addIgnoredPattern("正明");
+addIgnoredPattern("カナ");
+addIgnoredPattern("せこ");
+addIgnoredPattern("なめし");
+addIgnoredPattern("のろ");
+addIgnoredPattern("山下");
+addIgnoredPattern("kranky");
+addIgnoredPattern("サンドラ");
+addIgnoredPattern("JACK");
+addIgnoredPattern("人生の勝者");
+addIgnoredPattern("100日後");
+addIgnoredPattern("豆");
+addIgnoredPattern("ぷか");
+addIgnoredPattern("^雨$");
+addIgnoredPattern("^ぱぁる$");
+addIgnoredPattern("松");
+addIgnoredPattern("うんこ");
+addIgnoredPattern("桜井誠");
+addIgnoredPattern("はげおやじ");
+addIgnoredPattern("人生終了");
+addIgnoredPattern("ハル");
+addIgnoredPattern("ニトヒロ");
+addIgnoredPattern("おすし");
+addIgnoredPattern("ゆう");
+addIgnoredPattern("暗い人");
+addIgnoredPattern("世界のぱんtまん");
+addIgnoredPattern("華治");
+addIgnoredPattern("あいん");
+addIgnoredPattern("モチヤマ");
+addIgnoredPattern("とも");
+addIgnoredPattern("しば");
+addIgnoredPattern("やまと");
+addIgnoredPattern("IRODORI");
+
 
 
 // 初期化処理
 observeChanges();
+
