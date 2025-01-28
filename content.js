@@ -222,6 +222,12 @@ addIgnoredPattern("とも");
 addIgnoredPattern("しば");
 addIgnoredPattern("やまと");
 addIgnoredPattern("IRODORI");
+addIgnoredPattern("中居");
+addIgnoredPattern("ADMIN");
+addIgnoredPattern("Riven");
+addIgnoredPattern("トマト");
+addIgnoredPattern("Alexa");
+
 
 
 
