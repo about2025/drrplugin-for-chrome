@@ -242,6 +242,7 @@ addIgnoredPattern("うてな");
 addIgnoredPattern("たき");
 addIgnoredPattern("ライダー");
 addIgnoredPattern("めのう");
+addIgnoredPattern("ちょこ");
 
 
 
