@@ -141,6 +141,8 @@ function observeChanges() {
 
 // 動的に正規表現を登録して無視するテスト（任意で削除可能）
 addIgnoredPattern("^名無し$"); // 完全一致「名無し」
+addIgnoredPattern("ななし"); //
+
 addIgnoredPattern("^新田隼人$"); // 完全一致「新田隼人」
 addIgnoredPattern("ﾄﾞｼﾀ"); // 部分一致「ﾄﾞｼﾀ」
 addIgnoredPattern("社会の現実");
@@ -243,9 +245,14 @@ addIgnoredPattern("たき");
 addIgnoredPattern("ライダー");
 addIgnoredPattern("めのう");
 addIgnoredPattern("ちょこ");
-
-
-
+addIgnoredPattern("ありす");
+addIgnoredPattern("男");
+addIgnoredPattern("ぼっち");
+addIgnoredPattern("たまごっちん");
+addIgnoredPattern("419");
+addIgnoredPattern("メイ");
+addIgnoredPattern("鈴");
+addIgnoredPattern("辰");
 // 初期化処理
 observeChanges();
 
