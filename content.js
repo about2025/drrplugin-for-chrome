@@ -233,7 +233,15 @@ addIgnoredPattern("カメラ");
 addIgnoredPattern("ハット");
 addIgnoredPattern("えいじ");
 addIgnoredPattern("中野");
-
+addIgnoredPattern("そま");
+addIgnoredPattern("のり");
+addIgnoredPattern("ぺん");
+addIgnoredPattern("すぴお");
+addIgnoredPattern("マッチョ");
+addIgnoredPattern("うてな");
+addIgnoredPattern("たき");
+addIgnoredPattern("ライダー");
+addIgnoredPattern("めのう");
 
 
 
