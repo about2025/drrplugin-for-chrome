@@ -227,6 +227,12 @@ addIgnoredPattern("ADMIN");
 addIgnoredPattern("Riven");
 addIgnoredPattern("トマト");
 addIgnoredPattern("Alexa");
+addIgnoredPattern("赤猫");
+addIgnoredPattern("許さ");
+addIgnoredPattern("カメラ");
+addIgnoredPattern("ハット");
+addIgnoredPattern("えいじ");
+addIgnoredPattern("中野");
 
 
 
