@@ -160,6 +160,7 @@ function observeChanges() {
 
 // 動的に正規表現を登録して無視するテスト（任意で削除可能）
 addIgnoredNamePattern("^名無し$"); // 完全一致「名無し」
+addIgnoredNamePattern("マイキー"); // 完全一致「新田隼人」
 addIgnoredNamePattern("^新田隼人$"); // 完全一致「新田隼人」
 addIgnoredNamePattern("ﾄﾞｼﾀ"); // 部分一致「ﾄﾞｼﾀ」
 addIgnoredNamePattern("社会の現実");
@@ -238,6 +239,7 @@ addIgnoredNamePattern("うさぎ");
 addIgnoredNamePattern("バージニア");
 addIgnoredNamePattern("A.*a");
 addIgnoredNamePattern("Ben");
+addIgnoredNamePattern("パンツ");
 
 
 // 初期化処理
