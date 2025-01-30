@@ -240,7 +240,8 @@ addIgnoredNamePattern("バージニア");
 addIgnoredNamePattern("A.*a");
 addIgnoredNamePattern("Ben");
 addIgnoredNamePattern("パンツ");
-
+addIgnoredNamePattern("高学歴");
 
 // 初期化処理
 observeChanges();
+
