@@ -17,6 +17,8 @@ const regHiddenRooms = [
   /変態/,    
   /インドア/,      
   /コミュ/,      
+  /映画/,        
+  /聖書部屋/,        
 ];
 
 // 無視する名前のリスト（正規表現の配列）
@@ -258,8 +260,14 @@ addIgnoredNamePattern("^伊藤");
 addIgnoredNamePattern("^クマ");
 addIgnoredNamePattern("たけし");
 addIgnoredNamePattern("丸亀");
+addIgnoredNamePattern("渡邊");
+addIgnoredNamePattern("TK");
+addIgnoredNamePattern("モチヤマ");
+addIgnoredNamePattern("春爛漫");
+addIgnoredNamePattern("yama");
 // 初期化処理
 observeChanges();
+
 
 
 
