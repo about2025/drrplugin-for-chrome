@@ -1,71 +1,71 @@
-// 対象となる部屋の名前
-const hiddenRooms = ["誰でも歓迎部屋", "雑談部屋(画像OFF)"];
-
-// 正規表現で指定する部屋名
-const regHiddenRooms = [/相談/,/😭/,/みみみ/];
+// 非表示にする部屋名の正規表現リスト
+const regHiddenRooms = [
+  /誰でも歓迎部屋/,
+  /雑談部屋\(画像OFF\)/,
+  /相談/,
+  /😭/,
+  /みみみ/,
+  /♪/,
+  /Linux/,
+  /憩いの場/,
+  /小中/,
+];
 
 // 無視する名前のリスト（正規表現の配列）
 const ignoredPatterns = [];
 
-// 部屋を非表示にする関数
-function hideRooms() {
-  const roomElements = document.querySelectorAll("#room_list ul.rooms li");
-  console.log(`[Debug] Found ${roomElements.length} rooms.`); // 部屋の数を出力
-
-  roomElements.forEach((room, index) => {
-    console.log(`[Debug] Processing room #${index + 1}: ${room.outerHTML}`); // 各部屋のHTMLを出力
-    const roomNameElement = room.querySelector("li.name"); // 部屋名の取得
-    const roomLockIcon = room.querySelector(".fa.fa-lock"); // 鍵アイコンを判定
-    const userList = room.querySelector("ul"); // 部屋内の人物リスト
-
-    let shouldHideRoom = false;
-
-    // 部屋名が指定リストまたは正規表現に一致する場合、または鍵付きの場合
-    if (roomNameElement) {
-      const roomName = roomNameElement.innerText.trim();
-      if (
-        hiddenRooms.includes(roomName) ||
-        regHiddenRooms.some((regex) => regex.test(roomName)) ||
-        roomLockIcon
-      ) {
-        shouldHideRoom = true;
-      }
-    }
-
-    // 部屋内の最初の人物が無視リストに一致する場合
-    if (userList && userList.children.length > 0) {
-      const firstUser = userList.children[0].innerText.trim();
-      if (ignoredPatterns.some((regex) => regex.test(firstUser))) {
-        console.log(`[Debug] Hiding room due to first user: ${firstUser}`);
-        shouldHideRoom = true;
-      }
-    }
-
-    // ユーザーリストが空の場合
-    if (userList && userList.children.length === 0) {
-      console.log(`!!!!!!!!! [Debug] User list is empty. Hiding the room.`);
-      console.log(room);
-      shouldHideRoom = true;
-    }
-
-    // 部屋を非表示
-    if (shouldHideRoom) {
-      const parentUl = room.closest("ul.rooms");
-      if (parentUl) {
-        console.log(`[Debug] Hiding the entire room (ul.rooms).`);
-        parentUl.style.display = "none";
-      } else {
-        console.log(`[Debug] Hiding only the <li> element.`);
-        room.style.display = "none";
-      }
-    } else {
-      console.log(`[Debug] Showing room.`);
-      room.style.display = ""; // 表示する部屋はリセット
-    }
-  });
+/**
+ * 指定された部屋を非表示にするべきか判定
+ * @param {string} roomName - 部屋名
+ * @param {boolean} hasLockIcon - 鍵付きかどうか
+ * @param {number} userCount - 部屋の人数
+ * @returns {boolean} - 非表示にするべきか
+ */
+function isRoomHidden(roomName, hasLockIcon, userCount) {
+  return (
+    regHiddenRooms.some((regex) => regex.test(roomName)) || // 部屋名フィルタ
+    hasLockIcon || // 鍵付き部屋
+    userCount === 0 // 人数ゼロ
+  );
 }
 
-// 無視する名前やシステムメッセージを非表示にする関数
+/**
+ * 部屋を非表示にする処理
+ */
+function hideRooms() {
+  const roomXPath = "//ul[@class='rooms clearfix']/li[@class='name']";
+  const roomNameElements = document.evaluate(roomXPath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+
+  console.log(`[Debug] Found ${roomNameElements.snapshotLength} rooms.`);
+
+  for (let i = 0; i < roomNameElements.snapshotLength; i++) {
+    const roomNameElement = roomNameElements.snapshotItem(i);
+    const roomName = roomNameElement.innerText.trim();
+    const roomContainer = roomNameElement.closest("ul.rooms");
+
+    if (!roomContainer) {
+      console.warn(`[Warning] Room #${i + 1} has no valid container. Skipping.`);
+      continue;
+    }
+
+    const roomLockIcon = !!roomContainer.querySelector(".fa-lock"); // 鍵付き判定
+    const userList = roomContainer.querySelector("ul");
+    const userCount = userList ? userList.children.length : 0;
+
+    console.log(`[Debug] Room "${roomName}" has ${userCount} users.`);
+
+    if (isRoomHidden(roomName, roomLockIcon, userCount)) {
+      console.log(`[Debug] Hiding room: ${roomName}`);
+      roomContainer.style.display = "none";
+    } else {
+      roomContainer.style.display = ""; // 表示
+    }
+  }
+}
+
+/**
+ * 無視するユーザーやシステムメッセージを非表示にする
+ */
 function hideIgnoredContent() {
   // チャットの発言を非表示
   document.querySelectorAll("#talks dl.talk").forEach((talk) => {
@@ -89,37 +89,56 @@ function hideIgnoredContent() {
     }
   });
 
-  // ユーザーリストの特定の名前を削除
-  document.querySelectorAll("#room_list ul.rooms li ul li").forEach((listItem) => {
-    const itemText = listItem.textContent.trim();
-    if (ignoredPatterns.some((regex) => regex.test(itemText))) {
-      listItem.remove();
+  // ユーザーリストから無視するユーザーを削除し、部屋の人数をチェック
+  document.querySelectorAll("#room_list ul.rooms li ul").forEach((userList) => {
+    let userRemoved = false;
+
+    userList.querySelectorAll("li").forEach((listItem) => {
+      const itemText = listItem.textContent.trim();
+      if (ignoredPatterns.some((regex) => regex.test(itemText))) {
+        console.log(`[Debug] Removing user: ${itemText}`);
+        listItem.remove();
+        userRemoved = true;
+      }
+    });
+
+    // ユーザー削除後に部屋の人数を再チェック
+    if (userRemoved && userList.children.length === 0) {
+      const roomContainer = userList.closest("ul.rooms");
+      if (roomContainer) {
+        console.log(`[Debug] Room is now empty, hiding it.`);
+        roomContainer.style.display = "none";
+      }
     }
   });
 }
 
-// 動的に無視する名前パターンを登録する関数
-function addIgnoredPattern(pattern) {
+/**
+ * 無視するユーザーを追加
+ * @param {string} pattern - 正規表現パターン
+ */
+function addIgnoredNamePattern(pattern) {
   try {
     const regex = new RegExp(pattern);
     if (!ignoredPatterns.some((existingRegex) => existingRegex.toString() === regex.toString())) {
       ignoredPatterns.push(regex);
       console.log(`Added regex to ignored patterns: ${pattern}`);
-      hideIgnoredContent(); // 登録後に即時非表示
+      hideIgnoredContent(); // 追加後に即時非表示処理
     }
   } catch (e) {
     console.error(`Invalid regular expression: ${pattern}`, e);
   }
 }
 
-// DOMの変更を監視して部屋や名前を非表示にする
+/**
+ * DOM変更を監視して非表示処理を適用
+ */
 function observeChanges() {
   const observer = new MutationObserver(() => {
     hideRooms();
     hideIgnoredContent();
   });
 
-  // 部屋リストの監視
   const targetNode = document.getElementById("room_list");
   if (targetNode) {
     hideRooms();
@@ -128,7 +147,6 @@ function observeChanges() {
     console.error("Target node #room_list not found!");
   }
 
-  // チャット全体の監視
   const chatNode = document.getElementById("body");
   if (chatNode) {
     hideIgnoredContent();
@@ -139,120 +157,88 @@ function observeChanges() {
 }
 
 
-// 動的に正規表現を登録して無視するテスト（任意で削除可能）
-addIgnoredPattern("^名無し$"); // 完全一致「名無し」
-addIgnoredPattern("ななし"); //
 
-addIgnoredPattern("^新田隼人$"); // 完全一致「新田隼人」
-addIgnoredPattern("ﾄﾞｼﾀ"); // 部分一致「ﾄﾞｼﾀ」
-addIgnoredPattern("社会の現実");
-addIgnoredPattern("^ぷに$");
-addIgnoredPattern("^たき$"); 
-addIgnoredPattern("^猫魔符$");
-addIgnoredPattern("野球くん");
-addIgnoredPattern("真アコ兄");
-addIgnoredPattern("ミチコ"); 
-addIgnoredPattern("アサイー");
-addIgnoredPattern("@◇@"); 
-addIgnoredPattern("屁"); 
-addIgnoredPattern("みみみ"); 
-addIgnoredPattern("隼人"); 
-addIgnoredPattern("苦夫"); 
-addIgnoredPattern("ぷにゃぷにゃ"); 
-addIgnoredPattern("レレレ"); 
-addIgnoredPattern("深淵"); 
-addIgnoredPattern("rakan"); 
-addIgnoredPattern("ちひろ"); 
-addIgnoredPattern("さそり"); 
-addIgnoredPattern("ニンニクましまし"); 
-addIgnoredPattern("(?<!駆け抜ける)熊"); 
-addIgnoredPattern("山の幸"); 
-addIgnoredPattern("ここなつ"); 
-addIgnoredPattern("丘介"); 
-addIgnoredPattern("はまいち");
-addIgnoredPattern("失敗作少女");
-addIgnoredPattern("♪");
-addIgnoredPattern("のび");
-addIgnoredPattern("さかな");
-addIgnoredPattern("オフショア");
-addIgnoredPattern("民");
-addIgnoredPattern("顎");
-addIgnoredPattern("あすか");
-addIgnoredPattern("ぶぶ");
-addIgnoredPattern("カイジ");
-addIgnoredPattern("たろ");
-addIgnoredPattern("あいすん");
-addIgnoredPattern("納豆");
-addIgnoredPattern("おじゆき");
-addIgnoredPattern("きたがわ");
-addIgnoredPattern("なめくじ");
-addIgnoredPattern("赤羽");
-addIgnoredPattern("おそ松");
-addIgnoredPattern("ネカマ侍");
-addIgnoredPattern("タケミカヅチ");
-addIgnoredPattern("猫ぷは");
-addIgnoredPattern("正明");
-addIgnoredPattern("カナ");
-addIgnoredPattern("せこ");
-addIgnoredPattern("なめし");
-addIgnoredPattern("のろ");
-addIgnoredPattern("山下");
-addIgnoredPattern("kranky");
-addIgnoredPattern("サンドラ");
-addIgnoredPattern("JACK");
-addIgnoredPattern("人生の勝者");
-addIgnoredPattern("100日後");
-addIgnoredPattern("豆");
-addIgnoredPattern("ぷか");
-addIgnoredPattern("^雨$");
-addIgnoredPattern("^ぱぁる$");
-addIgnoredPattern("松");
-addIgnoredPattern("うんこ");
-addIgnoredPattern("桜井誠");
-addIgnoredPattern("はげおやじ");
-addIgnoredPattern("人生終了");
-addIgnoredPattern("ハル");
-addIgnoredPattern("ニトヒロ");
-addIgnoredPattern("おすし");
-addIgnoredPattern("ゆう");
-addIgnoredPattern("暗い人");
-addIgnoredPattern("世界のぱんtまん");
-addIgnoredPattern("華治");
-addIgnoredPattern("あいん");
-addIgnoredPattern("モチヤマ");
-addIgnoredPattern("とも");
-addIgnoredPattern("しば");
-addIgnoredPattern("やまと");
-addIgnoredPattern("IRODORI");
-addIgnoredPattern("中居");
-addIgnoredPattern("ADMIN");
-addIgnoredPattern("Riven");
-addIgnoredPattern("トマト");
-addIgnoredPattern("Alexa");
-addIgnoredPattern("赤猫");
-addIgnoredPattern("許さ");
-addIgnoredPattern("カメラ");
-addIgnoredPattern("ハット");
-addIgnoredPattern("えいじ");
-addIgnoredPattern("中野");
-addIgnoredPattern("そま");
-addIgnoredPattern("のり");
-addIgnoredPattern("ぺん");
-addIgnoredPattern("すぴお");
-addIgnoredPattern("マッチョ");
-addIgnoredPattern("うてな");
-addIgnoredPattern("たき");
-addIgnoredPattern("ライダー");
-addIgnoredPattern("めのう");
-addIgnoredPattern("ちょこ");
-addIgnoredPattern("ありす");
-addIgnoredPattern("男");
-addIgnoredPattern("ぼっち");
-addIgnoredPattern("たまごっちん");
-addIgnoredPattern("419");
-addIgnoredPattern("メイ");
-addIgnoredPattern("鈴");
-addIgnoredPattern("辰");
+// 動的に正規表現を登録して無視するテスト（任意で削除可能）
+addIgnoredNamePattern("^名無し$"); // 完全一致「名無し」
+addIgnoredNamePattern("^新田隼人$"); // 完全一致「新田隼人」
+addIgnoredNamePattern("ﾄﾞｼﾀ"); // 部分一致「ﾄﾞｼﾀ」
+addIgnoredNamePattern("社会の現実");
+addIgnoredNamePattern("^ぷに$");
+addIgnoredNamePattern("^たき$"); 
+addIgnoredNamePattern("^猫魔符$");
+addIgnoredNamePattern("野球くん");
+addIgnoredNamePattern("真アコ兄");
+addIgnoredNamePattern("ミチコ"); 
+addIgnoredNamePattern("アサイー");
+addIgnoredNamePattern("@◇@"); 
+addIgnoredNamePattern("屁"); 
+addIgnoredNamePattern("みみみ"); 
+addIgnoredNamePattern("隼人"); 
+addIgnoredNamePattern("苦夫"); 
+addIgnoredNamePattern("ぷにゃぷにゃ"); 
+addIgnoredNamePattern("レレレ"); 
+addIgnoredNamePattern("深淵"); 
+addIgnoredNamePattern("rakan"); 
+addIgnoredNamePattern("ちひろ"); 
+addIgnoredNamePattern("さそり"); 
+addIgnoredNamePattern("ニンニクましまし"); 
+addIgnoredNamePattern("(?<!駆け抜ける)熊"); 
+addIgnoredNamePattern("山の幸"); 
+addIgnoredNamePattern("ここなつ"); 
+addIgnoredNamePattern("丘介"); 
+addIgnoredNamePattern("はまいち");
+addIgnoredNamePattern("失敗作少女");
+addIgnoredNamePattern("♪");
+addIgnoredNamePattern("のび");
+addIgnoredNamePattern("さかな");
+addIgnoredNamePattern("オフショア");
+addIgnoredNamePattern("民");
+addIgnoredNamePattern("顎");
+addIgnoredNamePattern("あすか");
+addIgnoredNamePattern("ぶぶ");
+addIgnoredNamePattern("カイジ");
+addIgnoredNamePattern("たろ");
+addIgnoredNamePattern("あいすん");
+addIgnoredNamePattern("納豆");
+addIgnoredNamePattern("おじゆき");
+addIgnoredNamePattern("きたがわ");
+addIgnoredNamePattern("なめくじ");
+addIgnoredNamePattern("赤羽");
+addIgnoredNamePattern("おそ松");
+addIgnoredNamePattern("ネカマ侍");
+addIgnoredNamePattern("タケミカヅチ");
+addIgnoredNamePattern("猫ぷは");
+addIgnoredNamePattern("正明");
+addIgnoredNamePattern("カナ");
+addIgnoredNamePattern("せこ");
+addIgnoredNamePattern("なめし");
+addIgnoredNamePattern("のろ");
+addIgnoredNamePattern("山下");
+addIgnoredNamePattern("kranky");
+addIgnoredNamePattern("サンドラ");
+addIgnoredNamePattern("JACK");
+addIgnoredNamePattern("人生の勝者");
+addIgnoredNamePattern("100日後");
+addIgnoredNamePattern("豆");
+addIgnoredNamePattern("ぷか");
+addIgnoredNamePattern("^雨$");
+addIgnoredNamePattern("^ぱぁる$");
+addIgnoredNamePattern("松");
+addIgnoredNamePattern("うんこ");
+addIgnoredNamePattern("桜井誠");
+addIgnoredNamePattern("はげおやじ");
+addIgnoredNamePattern("人生終了");
+addIgnoredNamePattern("ハル");
+addIgnoredNamePattern("ニトヒロ");
+addIgnoredNamePattern("おすし");
+addIgnoredNamePattern("ゆう");
+addIgnoredNamePattern("雨宮");
+addIgnoredNamePattern("巨大");
+addIgnoredNamePattern("うさぎ");
+addIgnoredNamePattern("バージニア");
+addIgnoredNamePattern("A.*a");
+addIgnoredNamePattern("Ben");
+
+
 // 初期化処理
 observeChanges();
-
