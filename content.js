@@ -20,6 +20,12 @@ const regHiddenRooms = [
   /映画/,
   /聖書部屋/,
   /タスク/,
+  /休憩室/,
+  /トリップ/,
+  /学生/,
+  /❤/,
+  /隼人/,
+
 ];
 
 // 無視する名前のリスト（正規表現の配列）
@@ -170,9 +176,9 @@ function observeChanges() {
 
 
 // 動的に正規表現を登録して無視するテスト（任意で削除可能）
-addIgnoredNamePattern("^名無し$"); // 完全一致「名無し」
+addIgnoredNamePattern("名無し"); // 完全一致「名無し」
 addIgnoredNamePattern("マイキー"); // 完全一致「新田隼人」
-addIgnoredNamePattern("^新田隼人$"); // 完全一致「新田隼人」
+addIgnoredNamePattern("新田隼人"); // 完全一致「新田隼人」
 addIgnoredNamePattern("ﾄﾞｼﾀ"); // 部分一致「ﾄﾞｼﾀ」
 addIgnoredNamePattern("社会の現実");
 addIgnoredNamePattern("^ぷに$");
@@ -211,7 +217,7 @@ addIgnoredNamePattern("ぶぶ");
 addIgnoredNamePattern("カイジ");
 addIgnoredNamePattern("たろ");
 addIgnoredNamePattern("あいすん");
-addIgnoredNamePattern("納豆");
+addIgnoredNamePattern("納豆|なっと");
 addIgnoredNamePattern("おじゆき");
 addIgnoredNamePattern("きたがわ");
 addIgnoredNamePattern("なめくじ");
@@ -221,7 +227,7 @@ addIgnoredNamePattern("ネカマ侍");
 addIgnoredNamePattern("タケミカヅチ");
 addIgnoredNamePattern("猫ぷは");
 addIgnoredNamePattern("正明");
-addIgnoredNamePattern("カナ");
+addIgnoredNamePattern("カナ$");
 addIgnoredNamePattern("せこ");
 addIgnoredNamePattern("なめし");
 addIgnoredNamePattern("のろ");
@@ -249,7 +255,6 @@ addIgnoredNamePattern("巨大");
 addIgnoredNamePattern("うさぎ");
 addIgnoredNamePattern("バージニア");
 addIgnoredNamePattern("A.*a");
-addIgnoredNamePattern("Ben");
 addIgnoredNamePattern("パンツ");
 addIgnoredNamePattern("高学歴");
 addIgnoredNamePattern("です");
@@ -268,13 +273,13 @@ addIgnoredNamePattern("春爛漫");
 addIgnoredNamePattern("yama");
 addIgnoredNamePattern("まりりん");
 addIgnoredNamePattern("こうん");
+addIgnoredNamePattern("柏");
+addIgnoredNamePattern("森崎");
+addIgnoredNamePattern("なるみ");
+addIgnoredNamePattern("すまお");
+addIgnoredNamePattern("どる");
 
+addIgnoredNamePattern("田中");
 // 初期化処理
 observeChanges();
-
-
-
-
-
-
 
