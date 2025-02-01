@@ -1,155 +1,38 @@
-// ====================
-// グローバル設定（ファイル上部で登録）
-// ====================
-
-// 部屋名非表示用正規表現リスト
-const GLOBAL_REG_HIDDEN_ROOMS = [
-  /誰でも歓迎部屋/,
-  /雑談部屋\(画像OFF\)/,
-  /相談/,
-  /😭/,
-  /💕/,
-  /みみみ/,
-  /♪/,
-  /Linux/,
-  /憩いの場/,
-  /小中/,
-  /鬱/,
-  /ウルフ/,
-  /運動部/,
-  /絵/,
-  /理系/,
-  /変態/,
-  /インドア/,
-  /コミュ/,
-  /映画/,
-  /聖書部屋/,
-  /タスク/,
-  /休憩室/,
-  /トリップ/,
-  /学生/,
-  /❤/,
-  /隼人/,
-  // 追加：表情絵文字 U+1F600～U+1F64F を含む部屋名も非表示対象
-  /[\u{1F600}-\u{1F64F}\u{1F979}]/u
-];
-
-// 無視する名前のパターン（文字列の配列、後で RegExp に変換）
-const GLOBAL_IGNORED_NAME_PATTERNS = [
-  "名無し",
-  "マイキー",
-  "新田隼人",
-  "ﾄﾞｼﾀ",
-  "社会の現実",
-  "^ぷに$",
-  "^たき$",
-  "^猫魔符$",
-  "野球くん",
-  "真アコ兄",
-  "ミチコ",
-  "アサイー",
-  "@◇@",
-  "屁",
-  "みみみ",
-  "隼人",
-  "苦夫",
-  "ぷにゃぷにゃ",
-  "レレレ",
-  "深淵",
-  "rakan",
-  "ちひろ",
-  "さそり",
-  "ニンニクましまし",
-  "(?<!駆け抜ける)熊",
-  "山の幸",
-  "ここなつ",
-  "丘介",
-  "はまいち",
-  "失敗作少女",
-  "♪",
-  "のび",
-  "さかな",
-  "オフショア",
-  "民",
-  "顎",
-  "あすか",
-  "ぶぶ",
-  "カイジ",
-  "たろ",
-  "あいすん",
-  "納豆|なっと",
-  "おじゆき",
-  "きたがわ",
-  "なめくじ",
-  "赤羽",
-  "おそ松",
-  "ネカマ侍",
-  "タケミカヅチ",
-  "猫ぷは",
-  "正明",
-  "カナ$",
-  "せこ",
-  "なめし",
-  "のろ",
-  "山下",
-  "kranky",
-  "サンドラ",
-  "JACK",
-  "人生の勝者",
-  "100日後",
-  "豆",
-  "ぷか",
-  "^雨$",
-  "^ぱぁる$",
-  "松",
-  "うんこ",
-  "桜井誠",
-  "はげおやじ",
-  "人生終了",
-  "ハル",
-  "ニトヒロ",
-  "おすし",
-  "ゆう",
-  "雨宮",
-  "巨大",
-  "うさぎ",
-  "バージニア",
-  "A.*a",
-  "パンツ",
-  "高学歴",
-  "です",
-  "ケン",
-  "^け$",
-  "^ライダー$",
-  "^まこと$",
-  "^伊藤",
-  "^クマ",
-  "たけし",
-  "丸亀",
-  "渡邊",
-  "TK",
-  "モチヤマ",
-  "春爛漫",
-  "yama",
-  "まりりん",
-  "こうん",
-  "柏",
-  "森崎",
-  "なるみ",
-  "すまお",
-  "どる",
-  "田中",
-];
-
-// ====================
-// メイン処理（DOM 操作など）
-// ====================
 (() => {
-  // 無視パターンを RegExp オブジェクトとして保持する配列（初期化時のみ変換）
-  const ignoredPatterns = GLOBAL_IGNORED_NAME_PATTERNS.map(pattern => new RegExp(pattern));
+  // 非表示にする部屋名の正規表現リスト
+  const regHiddenRooms = [
+    /誰でも歓迎部屋/,
+    /雑談部屋\(画像OFF\)/,
+    /相談/,
+    /😭/,
+    /💕/,
+    /みみみ/,
+    /♪/,
+    /Linux/,
+    /憩いの場/,
+    /小中/,
+    /鬱/,
+    /ウルフ/,
+    /運動部/,
+    /絵/,
+    /理系/,
+    /変態/,
+    /インドア/,
+    /コミュ/,
+    /映画/,
+    /聖書部屋/,
+    /タスク/,
+    /休憩室/,
+    /トリップ/,
+    /学生/,
+    /❤/,
+    /隼人/,
+    // 追加：絵文字コード（表情文字 U+1F600～U+1F64F および 🥹）を含む部屋名を非表示にする
+    /[\u{1F600}-\u{1F64F}\u{1F979}]/u
+  ];
 
-  // 部屋名非表示用正規表現はグローバル設定をそのまま利用
-  const regHiddenRooms = GLOBAL_REG_HIDDEN_ROOMS;
+  // 無視する名前のリスト（正規表現の配列）
+  const ignoredPatterns = [];
 
   /**
    * 指定された部屋を非表示にするべきか判定
@@ -164,137 +47,135 @@ const GLOBAL_IGNORED_NAME_PATTERNS = [
     userCount === 0; // 人数ゼロ
 
   /**
-   * 部屋の非表示処理
+   * 直後にある <hr class="dashed"> 要素を削除する
+   * @param {HTMLElement} container - 部屋コンテナ（ul.rooms）
+   */
+  const removeFollowingDashedHr = (container) => {
+    const nextSibling = container.nextElementSibling;
+    if (nextSibling && nextSibling.matches("hr.dashed")) {
+      console.log(`[Debug] Removing hr element following hidden room.`);
+      nextSibling.remove();
+    }
+  };
+
+  /**
+   * 部屋を非表示にする処理
    */
   const hideRooms = () => {
-    // DOM 構造を直接走査（querySelectorAll の結果は静的 NodeList）
-    const roomNameElements = document.querySelectorAll("ul.rooms.clearfix > li.name");
-    const len = roomNameElements.length;
-    // ループごとに変数定義をまとめ、for ループで高速化
-    for (let i = 0; i < len; i++) {
-      const roomNameElement = roomNameElements[i];
-      const roomName = roomNameElement.textContent.trim();  // innerText より textContent の方が高速
+    const roomXPath = "//ul[@class='rooms clearfix']/li[@class='name']";
+    const roomNameElements = document.evaluate(
+      roomXPath,
+      document,
+      null,
+      XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+      null
+    );
+    console.log(`[Debug] Found ${roomNameElements.snapshotLength} rooms.`);
+    for (let i = 0; i < roomNameElements.snapshotLength; i++) {
+      const roomNameElement = roomNameElements.snapshotItem(i);
+      const roomName = roomNameElement.innerText.trim();
       const roomContainer = roomNameElement.closest("ul.rooms");
       if (!roomContainer) {
-        console.warn(`[Warning] Room "${roomName}" has no valid container. Skipping.`);
+        console.warn(`[Warning] Room #${i + 1} has no valid container. Skipping.`);
         continue;
       }
-      // 1度のクエリでロックアイコンをチェック
-      const roomLockIcon = !!roomContainer.querySelector(".fa-lock");
+      // 鍵付き判定
+      const roomLockIcon = Boolean(roomContainer.querySelector(".fa-lock"));
       const userList = roomContainer.querySelector("ul");
       const userCount = userList ? userList.children.length : 0;
-
-      // 判定後に非表示処理を実施
+      console.log(`[Debug] Room "${roomName}" has ${userCount} users.`);
       if (isRoomHidden(roomName, roomLockIcon, userCount)) {
+        console.log(`[Debug] Hiding room: ${roomName}`);
         roomContainer.style.display = "none";
-        // ※ CSS クラスを使う場合は、以下のようにする例（CSS 側に .hidden { display: none; } を定義）
-        // roomContainer.classList.add("hidden");
-        // 直後の <hr class="dashed"> 要素があれば削除
-        const nextSibling = roomContainer.nextElementSibling;
-        if (nextSibling && nextSibling.matches("hr.dashed")) {
-          nextSibling.remove();
+        // ここでは、部屋名が非表示対象、もしくは人数が 0、または鍵付きの場合に hr を削除
+        if (regHiddenRooms.some(regex => regex.test(roomName)) || userCount === 0 || roomLockIcon) {
+          removeFollowingDashedHr(roomContainer);
         }
       } else {
         roomContainer.style.display = "";
-        // roomContainer.classList.remove("hidden");
       }
     }
   };
 
   /**
-   * 無視対象のユーザー名やシステムメッセージを非表示にする処理
+   * 無視するユーザーやシステムメッセージを非表示にする処理
    */
   const hideIgnoredContent = () => {
-    // チャット発言の非表示
-    const talks = document.querySelectorAll("#talks dl.talk");
-    for (let i = 0, len = talks.length; i < len; i++) {
-      const talk = talks[i];
-      const dt = talk.querySelector("dt");
-      if (dt) {
-        const talkerName = dt.textContent.trim();
-        for (let j = 0, patLen = ignoredPatterns.length; j < patLen; j++) {
-          if (ignoredPatterns[j].test(talkerName)) {
-            talk.style.display = "none";
-            break;
-          }
+    // チャットの発言を非表示
+    document.querySelectorAll("#talks dl.talk").forEach(talk => {
+      const talkerNameElement = talk.querySelector("dt");
+      if (talkerNameElement) {
+        const talkerName = talkerNameElement.innerText.trim();
+        if (ignoredPatterns.some(regex => regex.test(talkerName))) {
+          talk.style.display = "none";
         }
       }
-    }
-
-    // システムメッセージの非表示
-    const sysTalks = document.querySelectorAll("#talks .talk.system");
-    for (let i = 0, len = sysTalks.length; i < len; i++) {
-      const systemMessage = sysTalks[i];
-      const messageText = systemMessage.textContent.trim();
-      // 1ループ内で条件をまとめる
+    });
+    // システムメッセージを非表示
+    document.querySelectorAll("#talks .talk.system").forEach(systemMessage => {
+      const messageText = systemMessage.innerText.trim();
       if (
-        (ignoredPatterns.some(regex => regex.test(messageText))) &&
+        ignoredPatterns.some(regex => regex.test(messageText)) &&
         (messageText.includes("入室しました") || messageText.includes("退室しました"))
       ) {
         systemMessage.style.display = "none";
       }
-    }
-
-    // ユーザーリストから無視対象ユーザーを削除し、部屋の人数チェック
-    const userLists = document.querySelectorAll("#room_list ul.rooms li ul");
-    for (let i = 0, len = userLists.length; i < len; i++) {
-      const userList = userLists[i];
+    });
+    // ユーザーリストから無視するユーザーを削除し、部屋の人数をチェック
+    document.querySelectorAll("#room_list ul.rooms li ul").forEach(userList => {
       let userRemoved = false;
-      const listItems = userList.querySelectorAll("li");
-      for (let j = 0, l = listItems.length; j < l; j++) {
-        const listItem = listItems[j];
+      userList.querySelectorAll("li").forEach(listItem => {
         const itemText = listItem.textContent.trim();
-        for (let k = 0, patLen = ignoredPatterns.length; k < patLen; k++) {
-          if (ignoredPatterns[k].test(itemText)) {
-            console.log(`[Debug] Removing user: ${itemText}`);
-            listItem.remove();
-            userRemoved = true;
-            break;
-          }
+        if (ignoredPatterns.some(regex => regex.test(itemText))) {
+          console.log(`[Debug] Removing user: ${itemText}`);
+          listItem.remove();
+          userRemoved = true;
         }
-      }
+      });
       if (userRemoved && userList.children.length === 0) {
         const roomContainer = userList.closest("ul.rooms");
         if (roomContainer) {
+          console.log(`[Debug] Room is now empty, hiding it.`);
           roomContainer.style.display = "none";
-          const nextSibling = roomContainer.nextElementSibling;
-          if (nextSibling && nextSibling.matches("hr.dashed")) {
-            nextSibling.remove();
-          }
+          // 人数が 0 の場合も hr を削除
+          removeFollowingDashedHr(roomContainer);
         }
       }
-    }
+    });
   };
 
-  // debouncing 用のフラグ
-  let updatePending = false;
-  const scheduleUpdate = () => {
-    if (!updatePending) {
-      updatePending = true;
-      requestAnimationFrame(() => {
-        hideRooms();
-        hideIgnoredContent();
-        updatePending = false;
-      });
+  /**
+   * 無視するユーザーを追加する関数
+   * @param {string} pattern - 正規表現パターン
+   */
+  const addIgnoredNamePattern = (pattern) => {
+    try {
+      const regex = new RegExp(pattern);
+      if (!ignoredPatterns.some(existingRegex => existingRegex.toString() === regex.toString())) {
+        ignoredPatterns.push(regex);
+        console.log(`Added regex to ignored patterns: ${pattern}`);
+        hideIgnoredContent(); // 登録後に即時非表示処理を実行
+      }
+    } catch (e) {
+      console.error(`Invalid regular expression: ${pattern}`, e);
     }
   };
 
   /**
-   * DOM 変更を監視し、変更があった場合にまとめて処理を実行する
+   * DOM の変更を監視し、非表示処理を適用する関数
    */
   const observeChanges = () => {
-    const observer = new MutationObserver(scheduleUpdate);
-
-    // 監視対象のノードをできるだけ限定する
+    const observer = new MutationObserver(() => {
+      hideRooms();
+      hideIgnoredContent();
+    });
     const roomListNode = document.getElementById("room_list");
     if (roomListNode) {
-      // 初回処理
       hideRooms();
       observer.observe(roomListNode, { childList: true, subtree: true });
     } else {
       console.error("Target node #room_list not found!");
     }
-
     const chatNode = document.getElementById("body");
     if (chatNode) {
       hideIgnoredContent();
@@ -304,6 +185,117 @@ const GLOBAL_IGNORED_NAME_PATTERNS = [
     }
   };
 
-  // 初期化処理：監視を開始
+  // 無視するユーザーの正規表現を登録（必要に応じて追加・変更可能）
+  const ignoredNamePatterns = [
+    "名無し",
+    "マイキー",
+    "新田隼人",
+    "ﾄﾞｼﾀ",
+    "社会の現実",
+    "^ぷに$",
+    "^たき$",
+    "^猫魔符$",
+    "野球くん",
+    "真アコ兄",
+    "ミチコ",
+    "アサイー",
+    "@◇@",
+    "屁",
+    "みみみ",
+    "隼人",
+    "苦夫",
+    "ぷにゃぷにゃ",
+    "レレレ",
+    "深淵",
+    "rakan",
+    "ちひろ",
+    "さそり",
+    "ニンニクましまし",
+    "(?<!駆け抜ける)熊",
+    "山の幸",
+    "ここなつ",
+    "丘介",
+    "はまいち",
+    "失敗作少女",
+    "♪",
+    "のび",
+    "さかな",
+    "オフショア",
+    "民",
+    "顎",
+    "あすか",
+    "ぶぶ",
+    "カイジ",
+    "たろ",
+    "あいすん",
+    "納豆|なっと",
+    "おじゆき",
+    "きたがわ",
+    "なめくじ",
+    "赤羽",
+    "おそ松",
+    "ネカマ侍",
+    "タケミカヅチ",
+    "猫ぷは",
+    "正明",
+    "カナ$",
+    "せこ",
+    "なめし",
+    "のろ",
+    "山下",
+    "kranky",
+    "サンドラ",
+    "JACK",
+    "人生の勝者",
+    "100日後",
+    "豆",
+    "ぷか",
+    "^雨$",
+    "^ぱぁる$",
+    "松",
+    "うんこ",
+    "桜井誠",
+    "はげおやじ",
+    "人生終了",
+    "ハル",
+    "ニトヒロ",
+    "おすし",
+    "ゆう",
+    "雨宮",
+    "巨大",
+    "うさぎ",
+    "バージニア",
+    "A.*a",
+    "パンツ",
+    "高学歴",
+    "です",
+    "ケン",
+    "^け$",
+    "^ライダー$",
+    "^まこと$",
+    "^伊藤",
+    "^クマ",
+    "たけし",
+    "丸亀",
+    "渡邊",
+    "TK",
+    "モチヤマ",
+    "春爛漫",
+    "yama",
+    "まりりん",
+    "こうん",
+    "柏",
+    "森崎",
+    "なるみ",
+    "すまお",
+    "どる",
+    "田中",
+    "とも",
+  ];
+
+  // 上記パターンを順次登録
+  ignoredNamePatterns.forEach(pattern => addIgnoredNamePattern(pattern));
+
+  // 初期化：DOM 監視の設定を開始
   observeChanges();
 })();
